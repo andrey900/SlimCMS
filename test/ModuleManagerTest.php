@@ -11,20 +11,8 @@ class ModuleManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleton()
     {
-        $this->singletonSuccess();
-        $this->singletonError();
-    }
-
-    protected function singletonSuccess(){
-        $manager = \App\Source\ModuleManager::getInstance();
-        $this->assertInstanceOf('App\Source\ModuleManager', $manager);
-        $manager1 = \App\Source\ModuleManager::getInstance();
-        $this->assertInstanceOf('App\Source\ModuleManager', $manager1);
-        $this->assertSame($manager, $manager1);
-    }
-
-    protected function singletonError(){
-        $manager = new \App\Source\ModuleManager();
+        $manager = new \App\Source\ModuleManager(MODULE_PATH);
+        $this->assertInstanceOf('\Pimple\Container', $manager->getModules());
     }
 
     public function test()

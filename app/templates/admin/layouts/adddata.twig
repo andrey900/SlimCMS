@@ -1,6 +1,27 @@
 <div class="row">
     <div class="col-md-2"></div>
 <div class="col-md-8">
+
+        {#<div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+                        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+                        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+                        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="home">1...</div>
+                        <div role="tabpanel" class="tab-pane" id="profile">2...</div>
+                        <div role="tabpanel" class="tab-pane" id="messages">3...</div>
+                        <div role="tabpanel" class="tab-pane" id="settings">4...</div>
+                </div>
+
+        </div>#}
+
     {% if type_link is defined %}
         <form action="{{ path_for(type_link) }}" method="POST" enctype="multipart/form-data">
     {% else %}
@@ -10,17 +31,7 @@
         <input name="{{csrf.nameKey}}" type="hidden" value="{{csrf.name}}">
 
     {% set type = 'Add' %}
-    {#% for field in fields %}
-        {% if field=='id' %}
-            {% set type = 'Edit' %}
-            <input name="{{field}}" value="{{ fieldsValues[field] }}" class="form-control" type="hidden">
-        {% else %}
-            <div class="form-group">
-                <label>{{field}}</label>
-                <input name="{{field}}" {% if fieldsValues[field] is defined %} value="{{ fieldsValues[field] }}" {% endif %} class="form-control" placeholder="Text here">
-            </div>
-        {% endif %}
-    {% endfor %#}
+
     {% for item in ttt %}
         {% if item.visible %}
         <div class="form-group">
@@ -43,9 +54,11 @@
             <label>Text area</label>
             <textarea rows="3" class="form-control"></textarea>
         </div>-->
+        <button class="btn btn-success " type="submit">Save</button>
+        <button class="btn btn-success " type="button">Save+close</button>
+        <button class="btn btn-warning" type="button">Save+add</button>
         <a class="btn btn-danger" href="{{ path_for(all_e_link) }}">Cancel</a>
-        <button class="btn btn-success " type="submit">{{type}} {{ h1 }}</button>
-    </form>
+        </form><br>
 </div>
 <!-- /.col-lg-6 -->
 </div>

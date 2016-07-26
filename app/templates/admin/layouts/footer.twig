@@ -67,3 +67,77 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<div aria-hidden="true" aria-labelledby="modal-config-label" role="dialog" tabindex="-1" id="modal-config-tabs" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 id="modal-config-label" class="modal-title">Config show fields in tabs</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                All fields
+                                <a href="javascript:void(0);" class="move-to-show">>></a>
+                            </div>
+                            <div class="panel-body connectedSortable well" id="sortable1">
+                                {% for field in ttt %}
+                                    {% if field.name != 'id' and field.visible %}
+                                        <p class="ui-state-default" id="field-{{ field.name }}">{{field.name | capitalize}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                Fields in <span class="tab-name">Main</span>
+                                <a href="javascript:void(0);" class="move-to-hide"><<</a>
+                            </div>
+                            <div class="panel-body connectedSortable well" id="sortable2">
+                                {% for field in showFields %}
+                                    {% if field != 'id' %}
+                                        <p class="ui-state-default" id="field-{{field}}">{{field | capitalize}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-lg-4 -->
+                    <div class="col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Tabs
+                            </div>
+                            <div class="panel-body well" id="sortable10">
+                                <p class="ui-state-default">Main <span class="remove-tab" style="color:red; float: right; cursor: pointer;">x</span></p>
+                                <p class="ui-state-default">Preview <span class="remove-tab" style="color:red; float: right; cursor: pointer;">x</span></p>
+                                <p class="ui-state-default active">Other <span class="remove-tab" style="color:red; float: right; cursor: pointer;">x</span></p>
+                            </div>
+                            <div class="panel-footer">
+                                <input type="text" name="new-tab-name" class="new-tab-name">
+                                <button class="btn btn-success btn-xs">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-lg-4 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form>
+                    <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                    <input type="hidden" name="group" value="{{ all_e_link }}"></input>
+                    <input type="hidden" name="code" value="show_fields_in_table"></input>
+                    <button class="btn btn-primary save-config" type="button">Save changes</button>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

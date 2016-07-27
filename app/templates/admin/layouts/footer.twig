@@ -11,10 +11,11 @@
             <div class="modal-body">
 
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
                 All fields
+                <span><a href="javascript:void(0);" class="move-to-show" style="float: right;"><i class="glyphicon glyphicon-forward"></i></a></span>
             </div>
             <div class="panel-body connectedSortable well" id="sortable1">
             {% for field in allFields %}
@@ -25,16 +26,11 @@
             </div>
         </div>
     </div>
-    <div class="col-md-1">
-        <div style="margin-top: 85px;">
-        	<a href="javascript:void(0);" class="move-to-show">>></a>
-        	<a href="javascript:void(0);" class="move-to-hide"><<</a>
-        </div>
-    </div>
     <!-- /.col-lg-4 -->
     <div class="col-md-6">
         <div class="panel panel-success">
-            <div class="panel-heading">
+            <div class="panel-heading text-right">
+                <span><a href="javascript:void(0);" class="move-to-hide" style="float: left;"><i class="glyphicon glyphicon-backward"></i></a></span>
                 Show fields
             </div>
             <div class="panel-body connectedSortable well" id="sortable2">
@@ -82,9 +78,9 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 All fields
-                                <a href="javascript:void(0);" class="move-to-show">>></a>
+                                <a href="javascript:void(0);" class="move-to-show" style="float: right;"><i class="glyphicon glyphicon-forward"></i></a>
                             </div>
-                            <div class="panel-body connectedSortable well" id="sortable1">
+                            <div class="panel-body connectedSortable well" id="sortable3">
                                 {% for field in ttt %}
                                     {% if field.name != 'id' and field.visible %}
                                         <p class="ui-state-default" id="field-{{ field.name }}">{{field.name | capitalize}}</p>
@@ -95,11 +91,11 @@
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-success">
-                            <div class="panel-heading">
+                            <div class="panel-heading text-right">
+                                <a href="javascript:void(0);" class="move-to-hide" style="float: left;"><i class="glyphicon glyphicon-backward"></i></a>
                                 Fields in <span class="tab-name">Main</span>
-                                <a href="javascript:void(0);" class="move-to-hide"><<</a>
                             </div>
-                            <div class="panel-body connectedSortable well" id="sortable2">
+                            <div class="panel-body connectedSortable well" id="sortable4">
                                 {% for field in showFields %}
                                     {% if field != 'id' %}
                                         <p class="ui-state-default" id="field-{{field}}">{{field | capitalize}}</p>
@@ -140,4 +136,23 @@
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade modal-set-value" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Set new value</h4>
+            </div>
+            <div class="modal-body">
+            <div class="form-group">
+                <input type="text" name="old-value" class="form-control old-value" disabled>
+                <input type="text" name="new-value" class="form-control new-value" placeholder="New value">
+            </div>
+            <button class="btn btn-xs btn-success set-label-field">Save</button>
+            <button class="btn btn-xs btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>

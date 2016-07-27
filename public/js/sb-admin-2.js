@@ -71,17 +71,20 @@ var Admin = {
 }
 
 Admin.Panel.Configurator = {
+    field: false,
+
     init: function(){
         this.sortable();
         this.events();
     },
     sortable: function(){
-            $( "#sortable1, #sortable2" ).sortable({
+            $( "#sortable1, #sortable2, #sortable3, #sortable4" ).sortable({
               connectWith: ".connectedSortable",
               cancel: ".ui-state-disabled"
             }).disableSelection();
     },
     events: function(){
+        var self = this;
         var renameCounter = 0;
         $(document).on('click', '.save-config', function(){
             var show = $( "#sortable2" ).sortable( "serialize", { key: "show[]", expression: new RegExp(/field-(.+)/) } );
@@ -100,10 +103,16 @@ Admin.Panel.Configurator = {
             $('#sortable1 p').not('.ui-state-disabled').each(function(index, element) {
                 $(element).appendTo($('#sortable2'));
             });
+            $('#sortable3 p').not('.ui-state-disabled').each(function(index, element) {
+                $(element).appendTo($('#sortable4'));
+            });
         });
         $(document).on('click', '.move-to-hide', function(){
             $('#sortable2 p').not('.ui-state-disabled').each(function(index, element) {
                 $(element).appendTo($('#sortable1'));
+            });
+            $('#sortable4 p').not('.ui-state-disabled').each(function(index, element) {
+                $(element).appendTo($('#sortable3'));
             });
         });
         /*$(document).on('dblclick', '#sortable2 p', function(){
@@ -116,6 +125,22 @@ Admin.Panel.Configurator = {
                 '</div>';
             $(this).after($(field));
         });*/
+        $(document).on('dblclick', '#sortable2 p, #sortable4 p', function() {
+            $('.modal-set-value .old-value').val($(this).text());
+            self.field = $(this);
+            $('.modal-set-value').modal('show');
+        });
+        $(document).on('click', ".set-label-field", function () {
+            var fNV = $(this).closest(".modal-body").find('.new-value');
+            if(fNV.val().length > 0){
+                self.field.text(fNV.val());
+                fNV.val("");
+                self.field = false;
+                $('.modal-set-value').modal('hide');
+            } else {
+                fNV.addClass("danger");
+            }
+        })
     }
 }
 

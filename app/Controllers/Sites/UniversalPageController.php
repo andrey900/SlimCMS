@@ -41,7 +41,7 @@ class UniversalPageController extends BaseController
 		$this->setRequestResult($req, $res);
 
 		$this->data['subSections'] = Sections::getSubSections($this->data['pageData']->id);
-		$this->data['pagesLinks'] = Pages::where('category_id', $this->data['pageData']->id)->get();
+		$this->data['pagesLinks'] = Pages::where('category_id', $this->data['pageData']->id)->where('active', 1)->get();
 
 		$this->render('public\main\pages\section_page.twig');
 	}

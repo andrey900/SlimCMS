@@ -3,16 +3,16 @@
 <div class="col-md-8">
     {% if type_link is defined %}
         <form action="{{ path_for(type_link) }}" method="POST" enctype="multipart/form-data">
+        {% set type = 'Edit' %}
     {% else %}
         <form action="{{ path_for(store_link) }}" method="POST" enctype="multipart/form-data">
+        {% set type = 'Add' %}
     {% endif %}
         <input name="{{csrf.valueKey}}" type="hidden" value="{{csrf.value}}">
         <input name="{{csrf.nameKey}}" type="hidden" value="{{csrf.name}}">
 
-    {% set type = 'Add' %}
     {#% for field in fields %}
         {% if field=='id' %}
-            {% set type = 'Edit' %}
             <input name="{{field}}" value="{{ fieldsValues[field] }}" class="form-control" type="hidden">
         {% else %}
             <div class="form-group">

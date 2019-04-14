@@ -28,10 +28,7 @@ class Users extends BaseModel
 	}
 
 	public static function makePass($pass){
-		$options = [
-			    'cost' => 12,
-			    'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
-			];
+		$options = ['cost' => 12];
 
 		return password_hash($pass, PASSWORD_BCRYPT, $options);
 	}

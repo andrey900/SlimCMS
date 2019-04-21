@@ -41,10 +41,7 @@ class UniversalController extends BaseController
 		$this->initRoute($req, $res);
 
 		$model = ModelsFactory::getModelWithRequest($req);
-		$this->data['fields'] = $this->getFields($model->getColumnsNames());
-
-		$builder = new BuildFields();
-		$builder->setFields($model->getColumnsNames())->addJsonShema($model->getAnnotations());
+		$builder = $this->getBuilder($model);
 		$this->data['ttt'] = $builder->getAll();
 
 		$this->render('admin\addTables.twig');
@@ -53,21 +50,14 @@ class UniversalController extends BaseController
 	public function edit(request $req, $res, $args){
 		$this->initRoute($req, $res);
 
-		$model = ModelsFactory::getModelWithRequest($req);
-		$this->data['fields'] = $this->getFields($model->getColumnsNames(), ['id']);
-		$this->data['fieldsValues'] = $model->find($args['id']);
+		$model = ModelsFactory::getModelWithRequest($req)->find($args['id']);
 		$this->data['type_link'] = $this->data['save_link'];
 
-$builder = new BuildFields();
-$builder->setFields($model->getColumnsNames())->addJsonShema($model->getAnnotations());
-$builder->build();
-$builder->setType('id', 'hidden');
+		$builder = $this->getBuilder($model);
+		$builder->setType('id', 'hidden');
+		$builder->getField('id')->setValue($args['id']);
 
-foreach ($this->data['fields'] as $name) {
-	$builder->getField($name)->setValue($this->data['fieldsValues']->$name);
-}
-
-$this->data['ttt'] = $builder->getAll();
+		$this->data['ttt'] = $builder->getAll();
 
 		$this->render('admin\addTables.twig');
 	}
@@ -83,25 +73,50 @@ $this->data['ttt'] = $builder->getAll();
 			}
 		}
 
-		$model->save();
+		if (!method_exists($model, 'validate') || $model->validate()) {
+			$model->save();
 
-		$this->flash->addMessage('success', $this->controllerName.' success added!');
+			$this->flash->addMessage('success', $this->controllerName.' success added!');
 
-		return $res->withStatus(301)->withHeader('Location', $this->router->pathFor('list.'.$this->controllerName));
+			return $res->withStatus(301)->withHeader('Location', $this->router->pathFor('list.'.$this->controllerName));
+		}
+
+		$builder = $this->getBuilder($model);
+		$this->data['ttt'] = $builder->getAll();
+		$this->data['errors'] = $this->buildErrorString($model->getErrors());
+
+		$this->render('admin\addTables.twig');
 	}
 
 	public function doEdit(request $req, $res, $args){
 		$this->initRoute($req, $res);
 		$reqData = $req->getParsedBody();
-		$model = ModelsFactory::getModelWithRequest($req);
-		$model = $model->find($reqData['id']);
+		$model = ModelsFactory::getModelWithRequest($req)->find($reqData['id']);
 
 		$reqData = $this->uploadFiles($req, $reqData);
+		$fields = $this->getFields($model->getColumnsNames(), ['id']);
 
-		$model->update($reqData);
-		$this->flash->addMessage('success', $this->controllerName.' success edited!');
+		foreach ($reqData as $k=>$v) {
+			if (in_array($k, $fields))
+			$model->$k = $v;
+		}
 
-		return $res->withStatus(301)->withHeader('Location', $this->router->pathFor('list.'.$this->controllerName));
+		if (!method_exists($model, 'validate') || $model->validate()) {
+			$model->save();
+			$this->flash->addMessage('success', $this->controllerName.' success edited!');
+
+			return $res->withStatus(301)->withHeader('Location', $this->router->pathFor('list.'.$this->controllerName));
+		}
+
+		$builder = $this->getBuilder($model);
+		$builder->setType('id', 'hidden');
+		$builder->getField('id')->setValue($reqData['id']);
+
+		$this->data['type_link'] = $this->data['save_link'];
+		$this->data['ttt'] = $builder->getAll();
+		$this->data['errors'] = $this->buildErrorString($model->getErrors());
+
+		$this->render('admin\addTables.twig');
 	}
 
 	public function doDelete(request $req, $res, $args){
@@ -113,6 +128,25 @@ $this->data['ttt'] = $builder->getAll();
 		$this->flash->addMessage('success', $this->controllerName.' success deleted!');
 
 		return $res->withStatus(301)->withHeader('Location', $this->router->pathFor('list.'.$this->controllerName));
+	}
+
+	protected function getBuilder($model) {
+		$builder = new BuildFields();
+		$builder->setFields($model->getColumnsNames())->addJsonShema($model->getAnnotations());
+		$builder->build();
+		$fields = $this->getFields($model->getColumnsNames(), ['id']);
+		foreach ($fields as $name) {
+			$builder->getField($name)->setValue($model->$name);
+		}
+		return $builder;
+	}
+
+	protected function buildErrorString($errors) {
+		$errorsString = "";
+		foreach ($errors as $key => $value) {
+			$errorsString .= "${key}: ${value}\n";
+		}
+		return $errorsString;
 	}
 
 	protected function uploadFiles($req, $reqData){

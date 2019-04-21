@@ -5,6 +5,7 @@ namespace App\Models;
 class Pages extends BaseModel
 {
 	protected $table = 'pages';
+	protected $errors = array();
 
 	protected $fillable = array (
   0 => 'name',
@@ -22,4 +23,20 @@ class Pages extends BaseModel
   12 => 'sort',
   13 => 'category_id',
 );
+
+public function validate() {
+	$this->errors = array();
+	if ($this->show_in_menu && empty($this->name_for_menu)) {
+		$this->errors['name_for_menu'] = "can't be blank";
+	}
+	$page = Pages::where('code', $this->code)->first();
+	if ($page && $page->id != $this->id) {
+		$this->errors['code'] = "is already taken";
+	}
+	return empty($this->errors);
+}
+
+public function getErrors() {
+	return $this->errors;
+}
 }

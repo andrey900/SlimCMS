@@ -63,9 +63,7 @@ class Module extends BaseModule
             $data = [];
 
             foreach ($arRes as $item) {
-                if( ($arItems['parent_id'] || null === $arItems['parent_id']) &&
-                      $item->id != $event->getParams()['fieldsValues']->id
-                ){
+                if (!array_key_exists('parent_id', $arItems) || $item->id != $event->getParams()['fieldsValues']->id) {
                     $data[$item->id] = $item->name;
                 }
             }

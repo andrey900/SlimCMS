@@ -93,7 +93,7 @@ class BreadcrumbsBuilder
 					continue;
 
 				$url = '/';
-				$name = 'Главная';
+				$name = 'Home';
 				if( $item > 0 ){
 					$url = $GLOBALS['app']->getContainer()->router->pathFor('page.s'.$item);
 					$name = $items[$item]->name;

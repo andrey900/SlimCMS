@@ -38,7 +38,8 @@
         "phpmailer/phpmailer": "^5.2",
         "hassankhan/config": "^0.10.0",
         "symfony/debug": "^3.0",
-        "symfony/var-dumper": "^3.0"
+        "symfony/var-dumper": "^3.0",
+        "twig/extensions":"^1.5.4"
     },
     "require-dev": {
     }
